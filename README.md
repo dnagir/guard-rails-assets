@@ -83,5 +83,5 @@ Pull requests are very welcome!
 
 ## License
 
-Tohe MIT License
+MIT License
 
