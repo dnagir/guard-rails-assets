@@ -25,9 +25,11 @@ module Guard
     end
 
     def compile_assets
+      puts 'Compiling rails assets'
       result = system "rm -rf public/assets && bundle exec rake assets:precompile"   
       if result
         tree = `tree public/assets`
+        puts tree
         summary = tree.split("\n").last
         Notifier::notify summary, :title => 'Assets compiled'
       else
@@ -40,6 +42,7 @@ module Guard
     def run_for? command
       run_on = @options[:run_on]
       run_on = [:start, :all, :change] if not run_on or run_on.empty? 
+      run_on = [run_on] unless run_on.respond_to?(:include?)
       run_on.include?(command)
     end
   end
