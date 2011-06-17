@@ -39,7 +39,7 @@ describe Guard::RailsAssets do
     end
     it 'should notify on failure' do
       stub_system_with false
-      Kernel.should_not_receive(:`)
+      subject.should_not_receive(:`) # don't obtain tree
       Guard::Notifier.should_receive(:notify).with('see the details in the terminal', :title => "Can't compile assets", :image => :failed)
       subject.compile_assets
     end
