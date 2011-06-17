@@ -26,6 +26,7 @@ module Guard
       # clean
       # prefix or path
       # compile
+      Notifier::notify '1 directory, 2 files', :title => 'Assets compiled'
     end
 
   end
