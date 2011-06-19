@@ -26,12 +26,9 @@ module Guard
 
     def compile_assets
       puts 'Compiling rails assets'
-      result = system "rm -rf public/assets && bundle exec rake assets:precompile"   
+      result = system "bundle exec rake assets:clean assets:precompile"
       if result
-        tree = `tree public/assets`
-        puts tree
-        summary = tree.split("\n").last
-        Notifier::notify summary, :title => 'Assets compiled'
+        Notifier::notify 'Assets compiled'
       else
         Notifier::notify 'see the details in the terminal', :title => "Can't compile assets", :image => :failed
       end
