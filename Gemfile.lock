@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    guard-rails-assets (0.0.1)
+    guard-rails-assets (0.0.2)
       guard
 
 GEM
