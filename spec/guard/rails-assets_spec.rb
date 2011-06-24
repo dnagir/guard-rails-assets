@@ -5,10 +5,6 @@ describe Guard::RailsAssets do
   let(:options) { {} }
   subject { Guard::RailsAssets.new(['watchers'], options) }
 
-  it 'should be able to create guard' do
-    ::Guard::RailsAssets.new(['watchers'], {:options=>:here}).should_not be_nil
-  end
-
   describe '#start' do
     it_behaves_like 'guard command', :command => :start,         :run => true
   end
@@ -36,6 +32,7 @@ describe Guard::RailsAssets do
       Guard::Notifier.should_receive(:notify).with('Assets compiled')
       subject.compile_assets
     end
+
     it 'should notify on failure' do
       stub_system_with false
       subject.should_not_receive(:`) # don't obtain tree

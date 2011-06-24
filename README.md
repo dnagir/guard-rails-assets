@@ -4,7 +4,6 @@
 Guard::RailsAssets compiles all the assets in Rails 3.1 application automatically when files are modified.
 
 Tested on MRI Ruby 1.9.2 (please report if it works on your platform).
-Currently only POSIX system is supported. Sorry Windows guys :(
 
 If you have any questions please contact me [@dnagir](http://www.ApproachE.com).
 
@@ -35,14 +34,9 @@ explicitly depend on Rails.
 Good thing about it is that assets will always be same as produced by Rails.
 Bad thing is that it is pretty slow (~10 seconds) because it starts Rails from ground zero.
 
-## Rails Assets Pipeline
+*NOTE*: The guard runs the `rake assets:clean assets:precopile`.
+As of current Rails 3.1 edge that means that the assets will be deleted before they are compiled.
 
-The conventions used in this guard are:
-
-- assets prefix is set to 'assets' meaning that all assets are compiled in to `public/assets` directory;
-- the assets directory is disposable and can be cleared out.
-
-If the conventions above are not valid for you then perhaps you'd better submit a patch.
 
 ## Guardfile and Options
 
