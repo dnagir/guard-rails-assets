@@ -62,7 +62,7 @@ guard 'rails-assets', :run_on => [:start, :change] do
 end
 
 # This is the default behaviour
-guard 'rails-assets', :run_on => [:start, :change, :all] do
+guard 'rails-assets', :run_on => [:start, :change] do
   watch(%r{^app/assets/.+$})
 end
 ```
@@ -75,7 +75,24 @@ end
 
 Pull requests are very welcome!
 
-## License
+## Licensed under WTFPL
 
-MIT License
+```
+            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+                    Version 2, December 2004
+
+ Copyright (C) 2011 Dmytrii Nagirniak <dnagir@gmail.com>
+
+ Everyone is permitted to copy and distribute verbatim or modified
+ copies of this license document, and changing it is allowed as long
+ as the name is changed.
+
+            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+
+  0. You just DO WHAT THE FUCK YOU WANT TO.
+```
+
+
+
 
