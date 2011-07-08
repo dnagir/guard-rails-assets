@@ -14,7 +14,7 @@ describe Guard::RailsAssets do
   end
 
   describe '#run_all' do
-    it_behaves_like 'guard command', :command => :run_all,       :run => true
+    it_behaves_like 'guard command', :command => :run_all,       :run => false
   end
 
   describe '#run_on_change' do
