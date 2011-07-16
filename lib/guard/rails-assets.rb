@@ -34,8 +34,6 @@ module Guard
       end
     end
 
-    private
-
     def run_for? command
       run_on = @options[:run_on]
       run_on = [:start, :change] if not run_on or run_on.to_s.empty?

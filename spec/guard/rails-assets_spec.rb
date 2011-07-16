@@ -21,6 +21,19 @@ describe Guard::RailsAssets do
     it_behaves_like 'guard command', :command => :run_on_change, :run => true
   end
 
+  describe 'run options' do
+    it 'should allow array of symbols' do
+      guard = Guard::RailsAssets.new(['watchers'], :run_on => [:start, :change])
+      guard.run_for?(:start).should be_true
+      guard.run_for?(:reload).should be_false
+    end
+
+    it 'should allow symbol' do
+      guard = Guard::RailsAssets.new(['watchers'], :run_on => :start)
+      guard.run_for?(:start).should be_true
+      guard.run_for?(:reload).should be_false
+    end
+  end
 
   describe 'asset compilation using CLI' do
     def stub_system_with result
