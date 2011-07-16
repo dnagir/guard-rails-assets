@@ -1,7 +1,7 @@
 # Guard::RailsAssets
 
 
-Guard::RailsAssets compiles all the assets in Rails 3.1 application automatically when files are modified.
+Guard::RailsAssets compiles the assets in Rails 3.1 application automatically when files are modified.
 
 Tested on MRI Ruby 1.9.2 (please report if it works on your platform).
 
@@ -42,10 +42,10 @@ As of current Rails 3.1 edge that means that the assets will be deleted before t
 
 In addition to the standard configuration, this Guard has options to specify when exacly to precompile assets.
 
-- `:start` - compile assets when the guard starts (default)
-- `:reload` - compile assets when the guard quites (Ctrl-C) (not enabled)
-- `:all` - compile assets when running all the guard (Ctrl-/) (default)
-- `:change` - compile assets when watched files change (default)
+- `:start` - compile assets when the guard starts (enabled by default)
+- `:change` - compile assets when watched files change (enabled by default)
+- `:reload` - compile assets when the guard quites (Ctrl-C) (not enabled by default)
+- `:all` - compile assets when running all the guards (Ctrl-/) (not enabled by default)
 
 For example:
 
