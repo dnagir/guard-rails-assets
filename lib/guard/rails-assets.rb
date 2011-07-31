@@ -1,5 +1,6 @@
 require 'guard'
 require 'guard/guard'
+require 'rake/dsl_definition'
 
 module Guard
   class RailsAssets < Guard
@@ -8,11 +9,23 @@ module Guard
       @options = options || {}
     end
 
+    def create_rails_runner
+      @rails_runner = RailsRunner.new
+    end
+
+    def rails_runner
+      @rails_runner ||= create_rails_runner
+    end
+
     def start
+      create_rails_runner
+
       compile_assets if run_for? :start
     end
 
     def reload
+      rails_runner.restart_rails
+
       compile_assets if run_for? :reload
     end
 
@@ -26,7 +39,8 @@ module Guard
 
     def compile_assets
       puts 'Compiling rails assets'
-      result = system "bundle exec rake assets:clean assets:precompile"
+      result = rails_runner.compile_assets
+
       if result
         Notifier::notify 'Assets compiled'
       else
@@ -42,3 +56,5 @@ module Guard
     end
   end
 end
+
+require 'guard/rails-assets/rails_runner'

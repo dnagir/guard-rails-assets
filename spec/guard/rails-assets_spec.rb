@@ -3,7 +3,13 @@ require 'guard/rails-assets'
 
 describe Guard::RailsAssets do
   let(:options) { {} }
+  let(:rails_thread) { mock(Guard::RailsAssets::RailsThread) }
   subject { Guard::RailsAssets.new(['watchers'], options) }
+
+  before do
+    Guard::RailsAssets::RailsThread.stub(:new => rails_thread)
+    rails_thread.stub(:compile_assets => true, :restart_rails => true)
+  end
 
   describe '#start' do
     it_behaves_like 'guard command', :command => :start,         :run => true
@@ -37,7 +43,7 @@ describe Guard::RailsAssets do
 
   describe 'asset compilation using CLI' do
     def stub_system_with result
-      subject.should_receive(:system).with("bundle exec rake assets:clean assets:precompile").and_return result
+      rails_thread.should_receive(:compile_assets).and_return result
     end
 
     it 'should notify on success' do

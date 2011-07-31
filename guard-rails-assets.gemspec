@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
   s.rubyforge_project = "guard-rails-assets"
 
   s.add_dependency             'guard'
+  s.add_dependency             'rake'
   s.add_development_dependency 'rspec'
 
   s.files         = `git ls-files`.split("\n")
