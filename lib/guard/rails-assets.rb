@@ -7,24 +7,17 @@ module Guard
     def initialize(watchers=[], options={})
       super
       @options = options || {}
-    end
-
-    def create_rails_runner
+      @run_on = @options[:run_on] || [:start, :change]
+      @run_on = [@run_on] unless @run_on.respond_to?(:include?)
       @rails_runner = RailsRunner.new
     end
 
-    def rails_runner
-      @rails_runner ||= create_rails_runner
-    end
-
     def start
-      create_rails_runner
-
       compile_assets if run_for? :start
     end
 
     def reload
-      rails_runner.restart_rails
+      @rails_runner.restart_rails
 
       compile_assets if run_for? :reload
     end
@@ -39,7 +32,7 @@ module Guard
 
     def compile_assets
       puts 'Compiling rails assets'
-      result = rails_runner.compile_assets
+      result = @rails_runner.compile_assets
 
       if result
         Notifier::notify 'Assets compiled'
@@ -49,10 +42,7 @@ module Guard
     end
 
     def run_for? command
-      run_on = @options[:run_on]
-      run_on = [:start, :change] if not run_on or run_on.to_s.empty?
-      run_on = [run_on] unless run_on.respond_to?(:include?)
-      run_on.include?(command)
+      @run_on.include?(command)
     end
   end
 end

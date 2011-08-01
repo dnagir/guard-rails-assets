@@ -1,6 +1,5 @@
 module Guard
-  
-  # Keeps rails loaded in a thread waiting to run the asset pipeline compiler
+
   class RailsAssets::RailsRunner
 
     def initialize
@@ -29,6 +28,10 @@ module Guard
       end
     end
 
+    def boot_rails
+      require "#{Dir.pwd}/config/environment.rb"
+    end
+
     def run_compiler
       begin
         @failed = false
@@ -38,10 +41,6 @@ module Guard
         puts "An error occurred compiling assets: #{e}"
         @failed = true
       end
-    end
-
-    def boot_rails
-      require "#{Dir.pwd}/config/environment.rb"
     end
 
     # Runs the asset pipeline compiler.

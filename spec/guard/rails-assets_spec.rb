@@ -3,12 +3,12 @@ require 'guard/rails-assets'
 
 describe Guard::RailsAssets do
   let(:options) { {} }
-  let(:rails_thread) { mock(Guard::RailsAssets::RailsThread) }
+  let(:rails_runner) { mock(Guard::RailsAssets::RailsRunner) }
   subject { Guard::RailsAssets.new(['watchers'], options) }
 
   before do
-    Guard::RailsAssets::RailsThread.stub(:new => rails_thread)
-    rails_thread.stub(:compile_assets => true, :restart_rails => true)
+    Guard::RailsAssets::RailsRunner.stub(:new => rails_runner)
+    rails_runner.stub(:compile_assets => true, :restart_rails => true)
   end
 
   describe '#start' do
@@ -43,7 +43,7 @@ describe Guard::RailsAssets do
 
   describe 'asset compilation using CLI' do
     def stub_system_with result
-      rails_thread.should_receive(:compile_assets).and_return result
+      rails_runner.should_receive(:compile_assets).and_return result
     end
 
     it 'should notify on success' do
