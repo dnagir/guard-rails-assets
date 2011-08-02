@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Guard::RailsAssets::RailsRunner do
+
+  subject { Guard::RailsAssets::RailsRunner.new({}) }
   
   describe ".compile_assets" do
     
@@ -19,7 +21,7 @@ describe Guard::RailsAssets::RailsRunner do
         asset_pipeline.stub(:precompile)
       end
       
-      it "clean's the assets" do
+      it "cleans the assets" do
         asset_pipeline.should_receive(:clean)
         subject.compile_assets
       end

@@ -2,6 +2,8 @@ require 'rspec'
 require 'guard/rails-assets'
 require 'support/shared_examples'
 require 'support/stdout_helper'
+require 'guard/rails-assets/cli_runner'
+require 'guard/rails-assets/rails_runner'
 
 RSpec.configure do |config|
   config.color_enabled = true

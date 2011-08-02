@@ -9,15 +9,15 @@ module Guard
       @options = options || {}
       @run_on = @options[:run_on] || [:start, :change]
       @run_on = [@run_on] unless @run_on.respond_to?(:include?)
-      @rails_runner = RailsRunner.new
     end
 
     def start
+      runner.start if runner.respond_to? :start
       compile_assets if run_for? :start
     end
 
     def reload
-      @rails_runner.restart_rails
+      runner.reload if runner.respond_to? :reload
 
       compile_assets if run_for? :reload
     end
@@ -32,12 +32,21 @@ module Guard
 
     def compile_assets
       puts 'Compiling rails assets'
-      result = @rails_runner.compile_assets
+      result = runner.compile_assets
 
       if result
         Notifier::notify 'Assets compiled'
       else
         Notifier::notify 'see the details in the terminal', :title => "Can't compile assets", :image => :failed
+      end
+    end
+
+    def runner
+      @runner ||= begin
+        runner_name = (@options[:runner] || :rails).to_s
+
+        require_relative "rails-assets/#{runner_name}_runner"
+        ::Guard::RailsAssets.const_get(runner_name.capitalize + 'Runner').new(@options)
       end
     end
 
@@ -47,4 +56,3 @@ module Guard
   end
 end
 
-require 'guard/rails-assets/rails_runner'

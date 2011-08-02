@@ -2,61 +2,80 @@ require 'spec_helper'
 require 'guard/rails-assets'
 
 describe Guard::RailsAssets do
-  let(:options) { {} }
-  let(:rails_runner) { mock(Guard::RailsAssets::RailsRunner) }
-  subject { Guard::RailsAssets.new(['watchers'], options) }
 
-  before do
-    Guard::RailsAssets::RailsRunner.stub(:new => rails_runner)
-    rails_runner.stub(:compile_assets => true, :restart_rails => true)
-  end
 
-  describe '#start' do
-    it_behaves_like 'guard command', :command => :start,         :run => true
-  end
+  context 'with any runner' do
 
-  describe '#reload' do
-    it_behaves_like 'guard command', :command => :reload,        :run => false
-  end
+    let(:options) { {:runner => :cli} }
+    let(:runner) { mock('runner') }
+    subject { Guard::RailsAssets.new(['watchers'], options) }
 
-  describe '#run_all' do
-    it_behaves_like 'guard command', :command => :run_all,       :run => false
-  end
-
-  describe '#run_on_change' do
-    it_behaves_like 'guard command', :command => :run_on_change, :run => true
-  end
-
-  describe 'run options' do
-    it 'should allow array of symbols' do
-      guard = Guard::RailsAssets.new(['watchers'], :run_on => [:start, :change])
-      guard.run_for?(:start).should be_true
-      guard.run_for?(:reload).should be_false
+    before do
+     Guard::RailsAssets::CliRunner.stub(:new).and_return runner
     end
 
-    it 'should allow symbol' do
-      guard = Guard::RailsAssets.new(['watchers'], :run_on => :start)
-      guard.run_for?(:start).should be_true
-      guard.run_for?(:reload).should be_false
-    end
-  end
-
-  describe 'asset compilation using CLI' do
-    def stub_system_with result
-      rails_runner.should_receive(:compile_assets).and_return result
+    describe '#start' do
+      it_behaves_like 'guard command', :command => :start,         :run => true
     end
 
-    it 'should notify on success' do
-      stub_system_with true
-      Guard::Notifier.should_receive(:notify).with('Assets compiled')
-      subject.compile_assets
+    describe '#reload' do
+      it_behaves_like 'guard command', :command => :reload,        :run => false
     end
 
-    it 'should notify on failure' do
-      stub_system_with false
-      subject.should_not_receive(:`) # don't obtain tree
-      Guard::Notifier.should_receive(:notify).with('see the details in the terminal', :title => "Can't compile assets", :image => :failed)
-      subject.compile_assets
+    describe '#run_all' do
+      it_behaves_like 'guard command', :command => :run_all,       :run => false
+    end
+
+    describe '#run_on_change' do
+      it_behaves_like 'guard command', :command => :run_on_change, :run => true
+    end
+
+    describe 'run options' do
+      it 'should allow array of symbols' do
+        guard = Guard::RailsAssets.new(['watchers'], :run_on => [:start, :change])
+        guard.run_for?(:start).should be_true
+        guard.run_for?(:reload).should be_false
+      end
+
+      it 'should allow symbol' do
+        guard = Guard::RailsAssets.new(['watchers'], :run_on => :start)
+        guard.run_for?(:start).should be_true
+        guard.run_for?(:reload).should be_false
+      end
+
+    end
+
+    describe 'notifications' do
+      def stub_system_with result
+        runner.should_receive(:compile_assets).and_return result
+      end
+
+      it 'should notify on success' do
+        stub_system_with true
+        Guard::Notifier.should_receive(:notify).with('Assets compiled')
+        subject.compile_assets
+      end
+
+      it 'should notify on failure' do
+        stub_system_with false
+        Guard::Notifier.should_receive(:notify).with('see the details in the terminal', :title => "Can't compile assets", :image => :failed)
+        subject.compile_assets
+      end
+    end
+
+  end # context with any runner
+
+  describe 'picking a runner' do
+    it 'should use Rails runner by default' do
+      Guard::RailsAssets.new(['watchers']).runner.class.should == ::Guard::RailsAssets::RailsRunner
+    end
+
+    it 'should use CLI runner' do
+      Guard::RailsAssets.new(['watchers'], :runner => :cli).runner.class.should == ::Guard::RailsAssets::CliRunner
+    end
+    
+    it 'should use RailsRunner' do
+      Guard::RailsAssets.new(['watchers'], :runner => :rails).runner.class.should == ::Guard::RailsAssets::RailsRunner
     end
   end
 end

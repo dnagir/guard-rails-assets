@@ -2,8 +2,8 @@ module Guard
 
   class RailsAssets::RailsRunner
 
-    def initialize
-      boot_rails
+    def initialize(options)
+      
     end
 
     # Methods to run the asset pipeline
@@ -29,7 +29,10 @@ module Guard
     end
 
     def boot_rails
-      require "#{Dir.pwd}/config/environment.rb"
+      @rails_booted ||= begin
+        require "#{Dir.pwd}/config/environment.rb"
+        true
+      end
     end
 
     def run_compiler
@@ -47,6 +50,7 @@ module Guard
     #
     # @return [ Boolean ] Whether the compilation was successful or not
     def compile_assets
+      boot_rails
       run_compiler
       
       !failed?
