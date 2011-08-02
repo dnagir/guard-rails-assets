@@ -1,3 +1,4 @@
+require 'rake/dsl_definition'
 module Guard
 
   class RailsAssets::RailsRunner
@@ -58,10 +59,6 @@ module Guard
 
     def failed?
       @failed
-    end
-
-    def restart_rails
-      fail "Not implemented"
     end
   end
 end

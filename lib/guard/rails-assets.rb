@@ -1,6 +1,5 @@
 require 'guard'
 require 'guard/guard'
-require 'rake/dsl_definition'
 
 module Guard
   class RailsAssets < Guard
@@ -18,7 +17,6 @@ module Guard
 
     def reload
       runner.reload if runner.respond_to? :reload
-
       compile_assets if run_for? :reload
     end
 
