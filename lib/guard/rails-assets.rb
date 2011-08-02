@@ -29,13 +29,15 @@ module Guard
     end
 
     def compile_assets
-      puts 'Compiling rails assets'
+      puts "Compiling rails assets with #{runner.class.name}."
       result = runner.compile_assets
 
       if result
         Notifier::notify 'Assets compiled'
+        puts 'Assets compiled.'
       else
         Notifier::notify 'see the details in the terminal', :title => "Can't compile assets", :image => :failed
+        puts 'Failed to compile assets.'
       end
     end
 

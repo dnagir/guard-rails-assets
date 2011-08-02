@@ -28,15 +28,17 @@ $ guard init rails-assets
 ## Rails 3.1
 
 The Rails 3.1 is a mandatory requirement, but is not enforeced via dependencies for now.
-The reason is that the assets are currently compiled via command line and thus this guard does not
-explicitly depend on Rails.
+The reason is that the assets can currently be compiled using following "runners":
 
-Good thing about it is that assets will always be same as produced by Rails.
+1. rake command (CLI);
+2. loading the actual Rails environment.
+
+In the 1st case - this Guard is not actually using Rails directly while in the 2nd - it loads it explicitly.
+
+Good thing about the 1st approach is that assets will always be same as produced by Rails.
 Bad thing is that it is pretty slow (~10 seconds) because it starts Rails from ground zero.
 
-*NOTE*: The guard runs the `rake assets:clean assets:precopile`.
-As of current Rails 3.1 edge that means that the assets will be deleted before they are compiled.
-
+The 2nd approach is good because it is much faster, but does not reload Rails environment (so you have to restart guard).
 
 ## Guardfile and Options
 
@@ -47,10 +49,22 @@ In addition to the standard configuration, this Guard has options to specify whe
 - `:reload` - compile assets when the guard quites (Ctrl-C) (not enabled by default)
 - `:all` - compile assets when running all the guards (Ctrl-/) (not enabled by default)
 
+Also you can set the `:runner` option:
+
+- `:cli` - compile assets using the rake task - the most correct method, but slow.
+- `:rails` - compile assets by loading rails environment (default) - fast, but does not pick up changes.
+
+
+
 For example:
 
 
 ```ruby
+# This is the default behaviour
+guard 'rails-assets', :run_on => [:start, :change], :runner => :rails do
+  watch(%r{^app/assets/.+$})
+end
+
 # compile ONLY when something changes
 guard 'rails-assets', :run_on => :change do
   watch(%r{^app/assets/.+$})
@@ -60,18 +74,12 @@ end
 guard 'rails-assets', :run_on => [:start, :change] do
   watch(%r{^app/assets/.+$})
 end
-
-# This is the default behaviour
-guard 'rails-assets', :run_on => [:start, :change] do
-  watch(%r{^app/assets/.+$})
-end
 ```
 
 ## Development
 
 - Source hosted at [GitHub](https://github.com/dnagir/guard-rails-assets)
 - Report issues and feature requests to [GitHub Issues](https://github.com/dnagir/guard-rails-assets/issues)
-
 
 Pull requests are very welcome!
 
@@ -92,7 +100,3 @@ Pull requests are very welcome!
 
   0. You just DO WHAT THE FUCK YOU WANT TO.
 ```
-
-
-
-
