@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    guard-rails-assets (0.0.4)
+    guard-rails-assets (0.0.5)
       guard
       rake
 
