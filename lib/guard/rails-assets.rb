@@ -45,7 +45,7 @@ module Guard
       @runner ||= begin
         runner_name = (@options[:runner] || :rails).to_s
 
-        require_relative "rails-assets/#{runner_name}_runner"
+        require "guard/rails-assets/#{runner_name}_runner"
         ::Guard::RailsAssets.const_get(runner_name.capitalize + 'Runner').new(@options)
       end
     end
