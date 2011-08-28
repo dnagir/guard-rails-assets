@@ -14,18 +14,35 @@ module Guard
       extend Rake::DSL
       
       def clean
-        assets = Rails.application.config.assets
-        public_asset_path = Rails.public_path + assets.prefix
+        assets = ::Rails.application.config.assets
+        public_asset_path = File.join(::Rails.public_path, config.assets.prefix)
         rm_rf public_asset_path, :secure => true
       end
 
       def precompile
         Sprockets::Helpers::RailsHelper
-
-        assets = Rails.application.config.assets.precompile
-        # Always perform caching so that asset_path appends the timestamps to file references.
-        Rails.application.config.action_controller.perform_caching = true
-        Rails.application.assets.precompile(*assets)
+        ::ActionView::Base
+  
+        config = ::Rails.application.config
+        env    = ::Rails.application.assets
+        target = ::Rails.root.join("public#{config.assets.prefix}")
+  
+        config.assets.precompile.each do |path|
+          env.each_logical_path do |logical_path|
+            if path.is_a?(::Regexp)
+              next unless path.match(logical_path)
+            else
+              next unless ::File.fnmatch(path.to_s, logical_path)
+            end
+  
+            if asset = env.find_asset(logical_path)
+              filename = target.join(asset.digest_path)
+              mkdir_p filename.dirname
+              asset.write_to(filename)
+              asset.write_to("#{filename}.gz") if filename.to_s =~ /\.(css|js)$/
+            end
+          end
+        end
       end
     end
 
