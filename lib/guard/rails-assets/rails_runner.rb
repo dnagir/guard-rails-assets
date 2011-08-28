@@ -15,7 +15,7 @@ module Guard
       
       def clean
         assets = ::Rails.application.config.assets
-        public_asset_path = File.join(::Rails.public_path, config.assets.prefix)
+        public_asset_path = File.join(::Rails.public_path, assets.prefix)
         rm_rf public_asset_path, :secure => true
       end
 
