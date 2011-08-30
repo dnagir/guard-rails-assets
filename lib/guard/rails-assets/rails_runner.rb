@@ -36,7 +36,7 @@ module Guard
             end
   
             if asset = env.find_asset(logical_path)
-              filename = target.join(asset.digest_path)
+              filename = target.join(asset.pathname.basename)
               mkdir_p filename.dirname
               asset.write_to(filename)
               asset.write_to("#{filename}.gz") if filename.to_s =~ /\.(css|js)$/
