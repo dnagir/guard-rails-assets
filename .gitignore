@@ -3,3 +3,4 @@ pkg/*
 *.rbc
 *.swp
 .bundle
+Gemfile.lock
