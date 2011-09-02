@@ -12,6 +12,7 @@ module Guard
     def boot_rails
       return if @@rails_booted
       puts "------------BOOTING RAILS"
+      require 'rake'
       require "#{Dir.pwd}/config/environment.rb"
       app = ::Rails.application
       puts "--- CACHE=#{app.assets.cache}"
