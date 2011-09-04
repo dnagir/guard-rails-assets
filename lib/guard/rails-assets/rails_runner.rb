@@ -16,7 +16,7 @@ module Guard
 
       # TODO: Now another hack: Rails replaces Rails.application.assets with Rails.applciation.assets.index
       # (this happens when config.action_controller.perform_caching is true)
-      # It caches all the assets, so that the Rakse task can't be reused
+      # It caches all the assets, so that the Rake task can't be run multiple times
       require 'sprockets/environment'
       Sprockets::Environment.class_eval do
         def index; self; end # instead of Index.new(self)
