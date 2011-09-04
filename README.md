@@ -1,9 +1,9 @@
 # Guard::RailsAssets
 
 
-Guard::RailsAssets compiles the assets in Rails 3.1 application automatically when files are modified.
+Guard::RailsAssets compiles the assets within Rails 3.1 application whenever those change.
 
-Tested on MRI Ruby 1.9.2 (please report if it works on your platform).
+Tested on MRI 1.9.2 (please report if it works on your platform).
 
 If you have any questions please contact me [@dnagir](http://www.ApproachE.com).
 
@@ -22,25 +22,10 @@ gem 'guard-rails-assets'
 Add guard definition to your `Guardfile` by running:
 
 ```bash
-$ guard init rails-assets
+$ bundle exec guard init rails-assets
 ```
 
-## Rails 3.1
-
-The assets can be compiled using following "runners":
-
-1. rake command (CLI);
-2. loading the actual Rails environment.
-
-In the 1st case - this Guard is not actually using Rails directly while in the 2nd - it loads it explicitly.
-
-Good thing about the 1st approach is that assets will always be same as produced by Rails.
-Bad thing is that it is pretty slow (~10 seconds) because it starts Rails from ground zero.
-
-The 2nd approach is good because it is much faster, but does not reload Rails environment (so you have to restart guard).
-Additionally it relies on a single instance of your app to be loaded, so you can't have multiple guards with different reails configurations.
-
-## Guardfile and Options
+## Options
 
 In addition to the guard configuration, `guard-rails-assets` has options to specify when exacly to precompile assets.
 
@@ -52,7 +37,7 @@ In addition to the guard configuration, `guard-rails-assets` has options to spec
 Also you can set the `:runner` option:
 
 - `:cli` - compile assets using the rake task - the most correct method, but slow.
-- `:rails` - compile assets by loading rails environment (default) - fast, but does not pick up changes.
+- `:rails` - compile assets by loading rails environment (default) - fast, but does not pick up changes. Additionally it relies on a single instance of your app to be loaded, so you can't have multiple guards with different rails configurations.
 
 You can also use `:rails_env` option to specify what Rails environment to use (defaults to 'test').
 
