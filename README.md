@@ -11,8 +11,6 @@ If you have any questions please contact me [@dnagir](http://www.ApproachE.com).
 
 Please be sure to have [Guard](https://github.com/guard/guard) installed.
 
-Install the gem:
-
 Add it to your `Gemfile`, preferably inside the test and development group:
 
 ```ruby
@@ -39,7 +37,7 @@ Also you can set the `:runner` option:
 - `:cli` - compile assets using the rake task - the most correct method, but slow.
 - `:rails` - compile assets by loading rails environment (default) - fast, but does not pick up changes. Additionally it relies on a single instance of your app to be loaded, so you can't have multiple guards with different rails configurations.
 
-You can also use `:rails_env` option to specify what Rails environment to use (defaults to 'test').
+`:rails_env` option is available that allows you to specify the Rails environment to use (defaults to 'test').
 
 
 For example:
