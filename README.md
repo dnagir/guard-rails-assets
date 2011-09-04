@@ -27,8 +27,7 @@ $ guard init rails-assets
 
 ## Rails 3.1
 
-The Rails 3.1 is a mandatory requirement, but is not enforeced via dependencies for now.
-The reason is that the assets can currently be compiled using following "runners":
+The assets can be compiled using following "runners":
 
 1. rake command (CLI);
 2. loading the actual Rails environment.
@@ -39,10 +38,11 @@ Good thing about the 1st approach is that assets will always be same as produced
 Bad thing is that it is pretty slow (~10 seconds) because it starts Rails from ground zero.
 
 The 2nd approach is good because it is much faster, but does not reload Rails environment (so you have to restart guard).
+Additionally it relies on a single instance of your app to be loaded, so you can't have multiple guards with different reails configurations.
 
 ## Guardfile and Options
 
-In addition to the standard configuration, this Guard has options to specify when exacly to precompile assets.
+In addition to the guard configuration, `guard-rails-assets` has options to specify when exacly to precompile assets.
 
 - `:start` - compile assets when the guard starts (enabled by default)
 - `:change` - compile assets when watched files change (enabled by default)
@@ -54,6 +54,7 @@ Also you can set the `:runner` option:
 - `:cli` - compile assets using the rake task - the most correct method, but slow.
 - `:rails` - compile assets by loading rails environment (default) - fast, but does not pick up changes.
 
+You can also use `:rails_env` option to specify what Rails environment to use (defaults to 'test').
 
 
 For example:
@@ -61,7 +62,7 @@ For example:
 
 ```ruby
 # This is the default behaviour
-guard 'rails-assets', :run_on => [:start, :change], :runner => :rails do
+guard 'rails-assets', :run_on => [:start, :change], :runner => :rails, :rails_env => 'test' do
   watch(%r{^app/assets/.+$})
 end
 
