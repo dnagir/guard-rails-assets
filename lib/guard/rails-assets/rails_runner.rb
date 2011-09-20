@@ -47,6 +47,7 @@ module Guard
       return false unless @@rails_booted
       begin
         Rake::Task['assets:clean'].execute
+        ::Rails.application.assets.instance_eval { expire_index! }
         Rake::Task['assets:precompile'].execute
         true
       rescue => e
