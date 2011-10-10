@@ -32,12 +32,15 @@ In addition to the guard configuration, `guard-rails-assets` has options to spec
 - `:reload` - compile assets when the guard quites (Ctrl-C) (not enabled by default)
 - `:all` - compile assets when running all the guards (Ctrl-/) (not enabled by default)
 
-Also you can set the `:runner` option:
+You can also set the `:runner` option:
 
 - `:cli` - compile assets using the rake task - the most correct method, but slow.
 - `:rails` - compile assets by loading rails environment (default) - fast, but does not pick up changes. Additionally it relies on a single instance of your app to be loaded, so you can't have multiple guards with different rails configurations.
 
-`:rails_env` option is available that allows you to specify the Rails environment to use (defaults to 'test').
+Additional options are:
+
+- `:rails_env` - specify the Rails environment to use (defaults to 'test').
+- `:digest` - overrides the `config.asset.digest` setting (for production env it is usually `true`, for test - `false`).
 
 
 For example:
