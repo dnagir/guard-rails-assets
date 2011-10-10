@@ -36,6 +36,13 @@ module Guard
       @@rails_booted = true
     end
 
+    def clean
+      Rake::Task["tmp:cache:clear"].execute
+      # copy from the "assets:clean" Rake task
+      config = ::Rails.application.config
+      public_asset_path = File.join(Rails.public_path, config.assets.prefix)
+      rm_rf public_asset_path, :secure => true
+    end
 
     def precompile
       config = Rails.application.config
@@ -73,6 +80,7 @@ module Guard
       self.class.boot_rails
       return false unless @@rails_booted
       begin
+        clean
         precompile
         true
       rescue => e
