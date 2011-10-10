@@ -6,9 +6,11 @@ module Guard
 
     @@rails_booted = false # Only one rails app is allowed, so make it a class var
     @@rails_env = nil
+    @@digest = nil
 
     def initialize(options={})
       @@rails_env = (options[:rails_env] || 'test').to_s unless @@rails_booted
+      @@digest = options[:digest]
     end
 
     def self.apply_hacks
@@ -35,39 +37,32 @@ module Guard
     end
 
 
-    def clean
-      Rake::Task["tmp:cache:clear"].execute
-      # copy from the "assets:clean" Rake task
-      config = ::Rails.application.config
-      public_asset_path = File.join(Rails.public_path, config.assets.prefix)
-      rm_rf public_asset_path, :secure => true
-    end
-
     def precompile
-      # copy from the "assets:precompile" Rake task
+      config = Rails.application.config
+      unless config.assets.enabled
+        warn "Cannot precompile assets if sprockets is disabled. Enabling it."
+        config.assets.enabled = true
+      end
 
-      # Ensure that action view is loaded and the appropriate sprockets hooks get executed
-      ActionView::Base
+      # Ensure that action view is loaded and the appropriate
+      # sprockets hooks get executed
+      _ = ActionView::Base
 
-      config = ::Rails.application.config
+      digest = @@digest.nil? ? config.assets.digest : @@digest
+
       config.assets.compile = true
-
-      env    = ::Rails.application.assets
-
-      # Always compile files and avoid use of existing precompiled assets
-      config.assets.compile = true
+      config.assets.digest  = digest
       config.assets.digests = {}
 
-      target = File.join(::Rails.public_path, config.assets.prefix)
-      static_compiler = Sprockets::StaticCompiler.new(env, target, :digest => config.assets.digest)
-
-      manifest = static_compiler.precompile(config.assets.precompile)
-      manifest_path = config.assets.manifest || target
-      FileUtils.mkdir_p(manifest_path)
-
-      File.open("#{manifest_path}/manifest.yml", 'wb') do |f|
-        YAML.dump(manifest, f)
-      end
+      env      = Rails.application.assets
+      target   = File.join(Rails.public_path, config.assets.prefix)
+      compiler = Sprockets::StaticCompiler.new(env,
+                                               target,
+                                               config.assets.precompile,
+                                               :manifest_path => config.assets.manifest,
+                                               :digest => config.assets.digest,
+                                               :manifest => config.assets.digest.nil?)
+      compiler.compile
     end
 
 
@@ -78,7 +73,6 @@ module Guard
       self.class.boot_rails
       return false unless @@rails_booted
       begin
-        clean
         precompile
         true
       rescue => e
