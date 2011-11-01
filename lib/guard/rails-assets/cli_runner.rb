@@ -9,7 +9,7 @@ module Guard
     def compile_assets
       task = "assets:precompile"
       task += ":nondigest" unless @digest
-      system "RAILS_ENV=#{@rails_env} bundle exec rake assets:clean #{task}"
+      system "bundle exec rake assets:clean #{task} RAILS_ENV=#{@rails_env}"
     end
   end
 end
