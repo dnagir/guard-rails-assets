@@ -29,7 +29,7 @@ This way it doesn't conflict with any files in `public/assets`.
 
 This is optional and you can skip it for now.
 
-Bu if you are in for that, then:
+But if you are in for that, then:
 
 1. Add the option `config.assets.prefix = 'public/assets-test'` to `config/environments/test.rb` .
 2. Replace all `public/assets` with `public/assets-test` in `spec/javascripts/support/jasmine.yml`.
