@@ -40,12 +40,12 @@ module Guard
       Rake::Task["tmp:cache:clear"].execute
       # copy from the "assets:clean" Rake task
       config = ::Rails.application.config
-      public_asset_path = File.join(Rails.public_path, config.assets.prefix)
+      public_asset_path = File.join(::Rails.public_path, config.assets.prefix)
       rm_rf public_asset_path, :secure => true
     end
 
     def precompile
-      config = Rails.application.config
+      config = ::Rails.application.config
       unless config.assets.enabled
         warn "Cannot precompile assets if sprockets is disabled. Enabling it."
         config.assets.enabled = true
@@ -61,8 +61,8 @@ module Guard
       config.assets.digest  = digest
       config.assets.digests = {}
 
-      env      = Rails.application.assets
-      target   = File.join(Rails.public_path, config.assets.prefix)
+      env      = ::Rails.application.assets
+      target   = File.join(::Rails.public_path, config.assets.prefix)
       compiler = Sprockets::StaticCompiler.new(env,
                                                target,
                                                config.assets.precompile,
