@@ -4,7 +4,7 @@ describe Guard::RailsAssets::CliRunner do
 
   it 'should run the command' do
     subject.stub(:system)
-    subject.should_receive(:system).with("RAILS_ENV=test bundle exec rake assets:clean assets:precompile")
+    subject.should_receive(:system).with("bundle exec rake assets:clean assets:precompile RAILS_ENV=test")
     subject.compile_assets
   end
 
@@ -12,7 +12,7 @@ describe Guard::RailsAssets::CliRunner do
     subject { Guard::RailsAssets::CliRunner.new(:rails_env => :production) }
     it 'should run the command' do
       subject.stub(:system)
-      subject.should_receive(:system).with("RAILS_ENV=production bundle exec rake assets:clean assets:precompile")
+      subject.should_receive(:system).with("bundle exec rake assets:clean assets:precompile RAILS_ENV=production")
       subject.compile_assets
     end
   end
