@@ -11,6 +11,8 @@ Gem::Specification.new do |s|
   s.summary     = %q{Guard for compiling Rails assets}
   s.description = %q{guard-rails-assets automatically generates JavaScript, CSS, Image files using Rails assets pipelie}
 
+  s.licenses    = ['MIT', 'WTFPL']
+
   s.rubyforge_project = "guard-rails-assets"
 
   s.add_dependency             'guard'

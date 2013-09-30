@@ -83,7 +83,7 @@ end
 
 Pull requests are very welcome!
 
-## Licensed under WTFPL
+## Licensed under WTFPL or MIT
 
 ```
             DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
